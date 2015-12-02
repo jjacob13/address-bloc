@@ -20,14 +20,21 @@ class AddressBook
   end
 
   def import_from_csv(file_name)
-
+    csv_text = File.read(file_name)
+    csv = CSV.parse(csv_text, headers: true, skip_blanks: true)
+    csv.each do |row|
+      row_hash = row.to_hash
+      add_entry(row_hash["name"], row_hash["phone_number"], row_hash["email"])
+    end
   end
-  def remove_entry
+
+  def remove_entry(name, phone_number, email)
     @entries.each do |entry|
       if name == entry.name && phone_number == entry.phone_number && email == entry.email
         delete_entry = entry
+        @entries.delete(delete_entry)
+        break
       end
     end
-    @entries.delete(delete_entry)
   end
 end
