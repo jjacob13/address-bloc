@@ -75,10 +75,35 @@ class MenuController
   end
 
   def search_entries
+    print "Search by name: "
+     name = gets.chomp
+     match = @address_book.iterative_search(name)
+     system "clear"
+     if match
+       puts match.to_s
+       search_submenu(match)
+     else
+       puts "No match found for #{name}"
+     end
   end
 
   def read_csv
-  end
+     print "Enter CSV file to import: "
+     file_name = gets.chomp
+     if file_name.empty?
+       system "clear"
+       puts "No CSV file read"
+       main_menu
+     end
+     begin
+       entry_count = @address_book.import_from_csv(file_name).count
+       system "clear"
+       puts "#{entry_count} new entries added from #{file_name}"
+     rescue
+       puts "#{file_name} is not a valid CSV file, please enter the name of a valid CSV file"
+       read_csv
+     end
+   end
 
   def search_by_number
     system "clear"
